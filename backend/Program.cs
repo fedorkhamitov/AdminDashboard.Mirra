@@ -48,20 +48,11 @@ app.SeedDataAuth();
 
 app.MapPost("/auth/login", AuthEndpoint.Login);
 
-app.MapGet("/clients", async (AppDbContext db) => await db.Clients.ToListAsync()).RequireAuthorization();
+app.MapGet("/clients", ClientsEndpoint.GetClients).RequireAuthorization();
 
-app.MapGet("/payments", async (AppDbContext db, int take = 5) =>
-    await db.Payments
-        .OrderByDescending(p => p.Date)
-        .Take(take)
-        .ToListAsync()
-).RequireAuthorization();
+app.MapGet("/payments", PaymentsEndpoint.GetPayments).RequireAuthorization();
 
-app.MapGet("/rate", async (AppDbContext db) =>
-{
-    var rate = await db.Rates.FindAsync(1);
-    return rate is not null ? Results.Ok(rate.Rate) : Results.NotFound();
-}).RequireAuthorization();
+app.MapGet("/rate", RateEndpoint.GetRate).RequireAuthorization();
 
 app.MapPost("/rate", RateEndpoint.UpdateRate).RequireAuthorization();
 
