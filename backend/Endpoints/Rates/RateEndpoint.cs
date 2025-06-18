@@ -14,4 +14,10 @@ public static class RateEndpoint
         await db.SaveChangesAsync();
         return Results.Ok(rate.Rate);
     }
+
+    public static async Task<Results<Ok<decimal>, NotFound>> GetRate(AppDbContext db)
+    {
+        var rate = await db.Rates.FindAsync(1);
+        return rate is not null ? TypedResults.Ok(rate.Rate) : TypedResults.NotFound();
+    }
 }
