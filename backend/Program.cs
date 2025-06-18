@@ -1,11 +1,7 @@
-using System.Text;
-using AdminDashboard.Authentication;
 using AdminDashboard.Endpoints;
 using AdminDashboard.Endpoints.Auth;
 using AdminDashboard.Endpoints.Rates;
 using AdminDashboard.Extensions;
-using AdminDashboard.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
