@@ -1,6 +1,7 @@
 ﻿using AdminDashboard.Entities;
 using AdminDashboard.Infrastructure;
 using AdminDashboard.Infrastructure.Dtos;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace AdminDashboard.Endpoints.Rates;
 
