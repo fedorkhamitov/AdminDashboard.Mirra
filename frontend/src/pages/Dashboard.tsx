@@ -16,34 +16,18 @@ const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchClients()
-      .then((data) => {
-        if (!data) throw new Error("No data");
-        setClients(data);
-      })
-      .catch(() => setError("Error by get clients"))
-      .finally(() => setIsLoading(false));
-  }, []);
+    setError(null);
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetchPayments()
-      .then((data) => {
-        if (!data) throw new Error("No data");
-        setPayments(data);
+    Promise.all([fetchClients(), fetchPayments(), fetchRate()])
+      .then(([clientsData, paymentsData, rateData]) => {
+        if (!clientsData || !paymentsData || !rateData) {
+          throw new Error("No data");
+        }
+        setClients(clientsData);
+        setPayments(paymentsData);
+        setRate(rateData);
       })
-      .catch(() => setError("Error by get payments"))
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetchRate()
-      .then((data) => {
-        if (!data) throw new Error("No data");
-        setRate(data);
-      })
-      .catch(() => setError("Error by get rate"))
+      .catch(() => setError("Ошибка при загрузке данных"))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -58,12 +42,12 @@ const DashboardPage: React.FC = () => {
       setIsLoading(true);
       await updateRate({ rate: numericRate });
       setRate({ rate: numericRate });
-      setRateSuccess("Rate successfuly updated");
+      setRateSuccess("Rate успешно обновлён");
       setRateError(null);
       setNewRate("");
       setTimeout(() => setRateSuccess(null), 3000);
     } catch {
-      setRateError("Error by rate update");
+      setRateError("Ошибка при обновлении курса");
       setRateSuccess(null);
     } finally {
       setIsLoading(false);
@@ -126,7 +110,7 @@ const DashboardPage: React.FC = () => {
                   Сумма платежей
                 </th>
                 <th scope="col" className="text-end">
-                  Сумма платежей в вальте
+                  Сумма платежей в валюте
                 </th>
               </tr>
             </thead>
